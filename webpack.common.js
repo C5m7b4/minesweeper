@@ -39,7 +39,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: 'Typescript',
+      template: './public/index.html',
     }),
   ],
 };
