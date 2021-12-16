@@ -84,6 +84,7 @@ describe('Check increment neigbors', () => {
       [1, 1, 1],
     ]);
   });
+
   it('field 3x3 with two mines', () => {
     expect(
       incrementNeibors(
