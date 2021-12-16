@@ -6,13 +6,9 @@ import { GameName, GameNameProps } from './GameName';
 
 export type TopComponentType = LegendProps & GameNameProps;
 
-export const Top: FC<LegendProps & GameNameProps> = ({
-  children,
-  ...legendProps
-}) => (
+export const Top: FC<TopComponentType> = ({ children, ...legendProps }) => (
   <Header>
     <GameName>{children}</GameName>
-
     <Legend {...legendProps} />
   </Header>
 );

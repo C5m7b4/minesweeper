@@ -8,7 +8,12 @@
     "start": "webpack-dev-server --config webpack.dev.js --open",
     "test": "jest",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "chromatic": "npx chromatic --project-token=a9e0364fd8dc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/C5m7b4/minesweeper.git"
   },
   "keywords": [],
   "author": "C5m7b4",
@@ -25,6 +30,7 @@
     "@storybook/builder-webpack5": "^6.4.9",
     "@storybook/manager-webpack5": "^6.4.9",
     "@storybook/react": "^6.4.9",
+    "@testing-library/react": "^12.1.2",
     "@types/jest": "^27.0.3",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
