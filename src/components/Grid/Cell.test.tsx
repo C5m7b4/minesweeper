@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, createEvent } from '@testing-library/react';
 
 import { CellState, Coords } from '@/helpers/Field';
-import { Cell, checkCellIsActive } from './Cell';
+import { Cell, isActiveCell, ClosedFrame } from './Cell';
 
 describe('Cell Component Check', () => {
   const coords: Coords = [1, 1];
@@ -32,13 +32,17 @@ describe('Cell Component Check', () => {
 
       fireEvent.click(cellCmp);
       fireEvent.contextMenu(cellCmp);
-      if (checkCellIsActive(cell)) {
+      if (isActiveCell(cell)) {
         expect(props.onClick).toBeCalled();
         expect(props.onContextMenu).toBeCalled();
       } else {
         expect(props.onClick).not.toBeCalled();
         expect(props.onContextMenu).not.toBeCalled();
       }
+    });
+    it('Closed Frame should render correctly', () => {
+      const { asFragment } = render(<ClosedFrame mouseDown={true} />);
+      expect(asFragment).toMatchSnapshot();
     });
   }
 });

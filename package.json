@@ -9,7 +9,8 @@
     "test": "jest",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "chromatic": "npx chromatic --project-token=a9e0364fd8dc"
+    "chromatic": "npx chromatic --project-token=a9e0364fd8dc",
+    "stryker":"stryker run"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,8 @@
     "@storybook/builder-webpack5": "^6.4.9",
     "@storybook/manager-webpack5": "^6.4.9",
     "@storybook/react": "^6.4.9",
+    "@stryker-mutator/core": "^5.5.1",
+    "@stryker-mutator/jest-runner": "^5.5.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/react-hooks": "^7.0.2",

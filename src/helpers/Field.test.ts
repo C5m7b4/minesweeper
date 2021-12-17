@@ -56,8 +56,8 @@ describe('field Generator', () => {
       const field = fieldGenerator(2, 0.5);
       const flatField = field.flat();
 
-      console.table(field);
-      console.table(flatField);
+      // console.table(field);
+      // console.table(flatField);
 
       const cellsWithBombs = flatField.filter((cell) => cell === bomb);
       const emptyCells = flatField.filter((cell) => cell === 2);
@@ -72,7 +72,7 @@ describe('field Generator', () => {
       const probability = mines / (size * size);
       const field = fieldGenerator(size, probability);
 
-      console.table(field);
+      // console.table(field);
       const flatField = field.flat();
 
       const cellsWithBombs = flatField.filter((cell) => cell === bomb);

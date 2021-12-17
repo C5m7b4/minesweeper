@@ -23,18 +23,13 @@ export interface CellProps {
   onContextMenu: (coords: Coords) => void;
 }
 
-export const checkCellIsActive = (cell: CellType): boolean =>
+export const isActiveCell = (cell: CellType): boolean =>
   [CellState.hidden, CellState.mark, CellState.weakMark].includes(cell);
 
 export const Cell: FC<CellProps> = ({ children, coords, ...rest }) => {
-  const [mouseDown, setMouseDown, setMouseUp] = useMouseDown();
-  const isActive = checkCellIsActive(children);
+  const [mouseDown, onMouseDown, onMouseUp] = useMouseDown();
 
-  const onClick = () => {
-    if (isActive) {
-      rest.onClick(coords);
-    }
-  };
+  const onClick = () => rest.onClick(coords);
 
   const onContextMenu = (event: React.MouseEvent<HTMLElement>) => {
     /**
@@ -42,20 +37,8 @@ export const Cell: FC<CellProps> = ({ children, coords, ...rest }) => {
      */
     event.preventDefault();
 
-    if (isActive) {
+    if (isActiveCell(children)) {
       rest.onContextMenu(coords);
-    }
-  };
-
-  const onMouseDown = () => {
-    if (isActive) {
-      setMouseDown();
-    }
-  };
-
-  const onMouseUp = () => {
-    if (isActive) {
-      setMouseUp();
     }
   };
 
@@ -84,9 +67,14 @@ interface ComponentsMapProps {
 }
 
 const ComponentsMap: FC<ComponentsMapProps> = ({ children, ...rest }) => {
+  const nonActiveCellProps = {
+    onContextMenu: rest.onContextMenu,
+    'data-testid': rest['data-testid'],
+  };
+
   switch (children) {
     case CellState.empty:
-      return <RevealedFrame {...rest} />;
+      return <RevealedFrame {...nonActiveCellProps} />;
     case CellState.mark:
       return (
         <ClosedFrame {...rest}>
@@ -101,14 +89,14 @@ const ComponentsMap: FC<ComponentsMapProps> = ({ children, ...rest }) => {
       );
     case CellState.bomb:
       return (
-        <BombFrame {...rest}>
+        <BombFrame {...nonActiveCellProps}>
           <Bomb />
         </BombFrame>
       );
     case CellState.hidden:
       return <ClosedFrame {...rest} />;
     default:
-      return <RevealedFrame {...rest}>{children}</RevealedFrame>;
+      return <RevealedFrame {...nonActiveCellProps}>{children}</RevealedFrame>;
   }
 };
 
@@ -134,7 +122,7 @@ interface ClosedFrameProps {
   mouseDown?: boolean;
 }
 
-const ClosedFrame = styled.div<ClosedFrameProps>`
+export const ClosedFrame = styled.div<ClosedFrameProps>`
   display: flex;
   align-items: center;
   justify-content: center;
