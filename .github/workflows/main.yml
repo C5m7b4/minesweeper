@@ -29,6 +29,9 @@ jobs:
           node-version: 12.x
 
       # Runs a single command using the runners shell
+      - name: Install Packages
+        run: npm install
+        
       - name: Test
         run: npm test
 
