@@ -5,11 +5,11 @@ import {
   checkItemInfield,
 } from './CellsManipulators';
 
-const { bomb, empty } = CellState;
+const { bomb: b, empty: e } = CellState;
 
 describe('checkItemInField test', () => {
   describe('simple cases', () => {
-    const field: Field = [[empty]];
+    const field: Field = [[e]];
 
     it('out of y range', () => {
       expect(checkItemInfield([1, 0], field)).toBe(false);
@@ -52,20 +52,20 @@ describe('check neighbors selectors', () => {
 
 describe('Check increment neigbors', () => {
   it('field with only one item', () => {
-    expect(incrementNeibors([0, 0], [[bomb]])).toStrictEqual([[bomb]]);
+    expect(incrementNeibors([0, 0], [[b]])).toStrictEqual([[b]]);
   });
   it('field 2x2 with two mine', () => {
     expect(
       incrementNeibors(
         [0, 0],
         [
-          [bomb, empty],
-          [empty, bomb],
+          [b, e],
+          [e, b],
         ]
       )
     ).toStrictEqual([
-      [bomb, 1],
-      [1, bomb],
+      [b, 1],
+      [1, b],
     ]);
   });
   it('field 3x3 with one centered mine', () => {
@@ -73,14 +73,14 @@ describe('Check increment neigbors', () => {
       incrementNeibors(
         [1, 1],
         [
-          [empty, empty, empty],
-          [empty, bomb, empty],
-          [empty, empty, empty],
+          [e, e, e],
+          [e, b, e],
+          [e, e, e],
         ]
       )
     ).toStrictEqual([
       [1, 1, 1],
-      [1, bomb, 1],
+      [1, b, 1],
       [1, 1, 1],
     ]);
   });
@@ -90,14 +90,14 @@ describe('Check increment neigbors', () => {
       incrementNeibors(
         [1, 1],
         [
-          [0, 1, bomb],
-          [0, bomb, 1],
+          [0, 1, b],
+          [0, b, 1],
           [0, 0, 0],
         ]
       )
     ).toStrictEqual([
-      [1, 2, bomb],
-      [1, bomb, 2],
+      [1, 2, b],
+      [1, b, 2],
       [1, 1, 1],
     ]);
   });
