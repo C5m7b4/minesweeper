@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import styled from '@emotion/styled';
 
 import { Cell as CellType, CellState, Coords } from '@/helpers/Field';
@@ -22,12 +22,11 @@ export interface CellProps {
   onContextMenu: (coords: Coords) => void;
 }
 
+export const checkCellIsActive = (cell: CellType): boolean =>
+  [CellState.hidden, CellState.mark, CellState.weakMark].includes(cell);
+
 export const Cell: FC<CellProps> = ({ children, coords, ...rest }) => {
-  const isActiveCell = [
-    CellState.hidden,
-    CellState.mark,
-    CellState.weakMark,
-  ].includes(children);
+  const isActiveCell = checkCellIsActive(children);
 
   const onClick = () => {
     if (isActiveCell) {
@@ -35,11 +34,12 @@ export const Cell: FC<CellProps> = ({ children, coords, ...rest }) => {
     }
   };
 
-  const onContextMenu = (elem: React.MouseEvent<HTMLElement>) => {
+  const onContextMenu = (event: React.MouseEvent<HTMLElement>) => {
     /**
      * Prevent context menu by default
      */
-    elem.preventDefault();
+    event.preventDefault();
+
     if (isActiveCell) {
       rest.onContextMenu(coords);
     }
@@ -48,6 +48,7 @@ export const Cell: FC<CellProps> = ({ children, coords, ...rest }) => {
   const props = {
     onClick,
     onContextMenu,
+    'data-testid': `${children}_${coords}`,
   };
 
   return <ComponentsMap {...props}>{children}</ComponentsMap>;
@@ -57,12 +58,13 @@ interface ComponentsMapProps {
   children: CellType;
   onClick: (elem: React.MouseEvent<HTMLElement>) => void;
   onContextMenu: (elem: React.MouseEvent<HTMLElement>) => void;
+  'data-testid'?: string;
 }
 
 const ComponentsMap: FC<ComponentsMapProps> = ({ children, ...rest }) => {
   switch (children) {
     case CellState.empty:
-      return <ReveledFrame {...rest} />;
+      return <RevealedFrame {...rest} />;
     case CellState.mark:
       return (
         <ClosedFrame {...rest}>
@@ -84,7 +86,7 @@ const ComponentsMap: FC<ComponentsMapProps> = ({ children, ...rest }) => {
     case CellState.hidden:
       return <ClosedFrame {...rest} />;
     default:
-      return <ReveledFrame {...rest}>{children}</ReveledFrame>;
+      return <RevealedFrame {...rest}>{children}</RevealedFrame>;
   }
 };
 
@@ -122,7 +124,7 @@ const ClosedFrame = styled.div`
   }
 `;
 
-const ReveledFrame = styled(ClosedFrame)`
+const RevealedFrame = styled(ClosedFrame)`
   border-color: #dddddd;
   cursor: default;
   color: ${({ children }) => colors[children as CellType] ?? transparent};
@@ -138,7 +140,7 @@ const Bomb = styled.div`
   background-color: #333;
 `;
 
-const BombFrame = styled(ReveledFrame)`
+const BombFrame = styled(RevealedFrame)`
   background-color: #ec433c;
 `;
 
