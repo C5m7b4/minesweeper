@@ -10,7 +10,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "chromatic": "npx chromatic --project-token=a9e0364fd8dc",
-    "stryker":"stryker run"
+    "stryker": "stryker run",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -53,6 +54,7 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "html-webpack-plugin": "^5.5.0",
+    "husky": "^7.0.4",
     "jest": "^27.4.5",
     "mini-css-extract-plugin": "^2.4.5",
     "prettier": "^2.5.1",
