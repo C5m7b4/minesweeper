@@ -1,6 +1,8 @@
 import React, { FC, useState } from 'react';
 import styled from '@emotion/styled';
 
+import { useMouseDown } from '../../hooks/useMouseDown';
+
 export interface ResetProps {
   /**
    * Reset action handler
@@ -9,13 +11,13 @@ export interface ResetProps {
 }
 
 export const Reset: FC<ResetProps> = ({ onReset }) => {
-  const [mouseDown, setMouseDown] = useState(false);
+  const [mouseDown, setMouseDown, setMouseUp] = useMouseDown();
 
   return (
     <Button
-      onMouseLeave={() => setMouseDown(false)}
-      onMouseUp={() => setMouseDown(false)}
-      onMouseDown={() => setMouseDown(true)}
+      onMouseLeave={setMouseUp}
+      onMouseUp={setMouseUp}
+      onMouseDown={setMouseDown}
       onClick={onReset}
     >
       {mouseDown ? '😵' : '🙂'}

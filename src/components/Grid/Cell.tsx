@@ -2,6 +2,7 @@ import React, { FC, memo } from 'react';
 import styled from '@emotion/styled';
 
 import { Cell as CellType, CellState, Coords } from '@/helpers/Field';
+import { useMouseDown } from '../../hooks/useMouseDown';
 
 export interface CellProps {
   /**
@@ -26,10 +27,11 @@ export const checkCellIsActive = (cell: CellType): boolean =>
   [CellState.hidden, CellState.mark, CellState.weakMark].includes(cell);
 
 export const Cell: FC<CellProps> = ({ children, coords, ...rest }) => {
-  const isActiveCell = checkCellIsActive(children);
+  const [mouseDown, setMouseDown, setMouseUp] = useMouseDown();
+  const isActive = checkCellIsActive(children);
 
   const onClick = () => {
-    if (isActiveCell) {
+    if (isActive) {
       rest.onClick(coords);
     }
   };
@@ -40,14 +42,30 @@ export const Cell: FC<CellProps> = ({ children, coords, ...rest }) => {
      */
     event.preventDefault();
 
-    if (isActiveCell) {
+    if (isActive) {
       rest.onContextMenu(coords);
+    }
+  };
+
+  const onMouseDown = () => {
+    if (isActive) {
+      setMouseDown();
+    }
+  };
+
+  const onMouseUp = () => {
+    if (isActive) {
+      setMouseUp();
     }
   };
 
   const props = {
     onClick,
     onContextMenu,
+    onMouseDown,
+    onMouseUp,
+    onMouseLeave: onMouseUp,
+    mouseDown,
     'data-testid': `${children}_${coords}`,
   };
 
@@ -58,6 +76,10 @@ interface ComponentsMapProps {
   children: CellType;
   onClick: (elem: React.MouseEvent<HTMLElement>) => void;
   onContextMenu: (elem: React.MouseEvent<HTMLElement>) => void;
+  onMouseDown: () => void;
+  onMouseUp: () => void;
+  onMouseLeave: () => void;
+  mouseDown: boolean;
   'data-testid'?: string;
 }
 
@@ -108,7 +130,11 @@ const colors: { [key in CellType]: string } = {
   12: transparent,
 };
 
-const ClosedFrame = styled.div`
+interface ClosedFrameProps {
+  mouseDown?: boolean;
+}
+
+const ClosedFrame = styled.div<ClosedFrameProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,7 +144,8 @@ const ClosedFrame = styled.div`
   height: 1.8vw;
   background-color: #d1d1d1;
   border: 0.6vh solid transparent;
-  border-color: white #9e9e9e #9e9e9e white;
+  border-color: ${({ mouseDown = false }) =>
+    mouseDown ? 'transparent' : 'white #9e9e9e #9e9e9e white'};
   &:hover {
     filter: brightness(1.1);
   }
